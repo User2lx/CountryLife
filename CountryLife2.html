@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fight the World</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #game {
+      display: none;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .btn:hover {
+      background-color: #45a049;
+    }
+    .battle-result {
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Create Your Country</h1>
+  <div id="country-creation">
+    <label for="country-name">Country Name:</label>
+    <input type="text" id="country-name" placeholder="Enter your country name">
+    <br>
+    <label for="army-size">Army Size (100-1000):</label>
+    <input type="number" id="army-size" min="100" max="1000" value="500">
+    <br>
+    <label for="resources">Resources (100-1000):</label>
+    <input type="number" id="resources" min="100" max="1000" value="500">
+    <br>
+    <button class="btn" onclick="startGame()">Start Game</button>
+  </div>
+
+  <div id="game">
+    <h2>Welcome, <span id="player-country"></span>!</h2>
+    <p>Army Size: <span id="player-army"></span></p>
+    <p>Resources: <span id="player-resources"></span></p>
+    <button class="btn" onclick="battle()">Fight the World!</button>
+    <div class="battle-result" id="battle-result"></div>
+  </div>
+
+  <script>
+    let playerCountry = "";
+    let playerArmy = 0;
+    let playerResources = 0;
+
+    function startGame() {
+      playerCountry = document.getElementById("country-name").value || "MyCountry";
+      playerArmy = parseInt(document.getElementById("army-size").value);
+      playerResources = parseInt(document.getElementById("resources").value);
+
+      document.getElementById("player-country").textContent = playerCountry;
+      document.getElementById("player-army").textContent = playerArmy;
+      document.getElementById("player-resources").textContent = playerResources;
+
+      document.getElementById("country-creation").style.display = "none";
+      document.getElementById("game").style.display = "block";
+    }
+
+    function battle() {
+      const worldArmy = Math.floor(Math.random() * 1000) + 100;
+      const worldResources = Math.floor(Math.random() * 1000) + 100;
+      const battleOutcome = (playerArmy + playerResources) - (worldArmy + worldResources);
+
+      let resultMessage = "";
+      if (battleOutcome > 0) {
+        resultMessage = `You won! Your country is victorious over the world army.`;
+        playerArmy += 50; // Winning boosts the player's army
+        playerResources += 50; // Winning gives the player more resources
+      } else {
+        resultMessage = `You lost! The world's army was too strong.`;
+        playerArmy -= 50; // Losing weakens the player's army
+        playerResources -= 50; // Losing reduces the player's resources
+      }
+
+      document.getElementById("battle-result").textContent = resultMessage;
+      document.getElementById("player-army").textContent = playerArmy;
+      document.getElementById("player-resources").textContent = playerResources;
+    }
+  </script>
+
+</body>
+</html>
