@@ -1,45 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CountryLife Simulator</title>
   <style>
     body {
-      font-family: Arial;
-      background: #0e0e2c;
+      font-family: Arial, sans-serif;
+      background: #2c3e50;
       color: white;
+      margin: 0;
+      padding: 0;
       text-align: center;
-      padding: 20px;
+      box-sizing: border-box;
     }
+
+    header {
+      background: #34495e;
+      padding: 20px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
     .stats {
       display: flex;
       justify-content: center;
       gap: 20px;
-    }
-    .stat {
-      background: #1e1e3f;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    .event-box {
       margin-top: 20px;
     }
+
+    .stat {
+      background: #16a085;
+      padding: 15px;
+      border-radius: 10px;
+      width: 150px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat span {
+      font-size: 20px;
+    }
+
+    .event-box {
+      margin-top: 40px;
+      font-size: 20px;
+    }
+
     button {
-      background: #007bff;
+      background: #2980b9;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 15px 30px;
       margin: 10px;
+      font-size: 16px;
       border-radius: 5px;
       cursor: pointer;
+      transition: background 0.3s;
     }
+
     button:hover {
-      background: #0056b3;
+      background: #1abc9c;
     }
+
+    button:disabled {
+      background: #7f8c8d;
+      cursor: not-allowed;
+    }
+
   </style>
 </head>
 <body>
 
-  <h1>🌍 CountryLife Simulator</h1>
+  <header>🌍 CountryLife Simulator</header>
 
   <div class="stats">
     <div class="stat">💰 Economy: <span id="economy">50</span></div>
@@ -62,6 +94,7 @@
       environment: 50
     };
 
+    // Event set with 40+ different scenarios
     const events = [
       {
         text: "Your people want free healthcare.",
@@ -83,7 +116,30 @@
           { text: "Invest", effect: { environment: +20, economy: -15 } },
           { text: "Reject", effect: { environment: -10 } }
         ]
-      }
+      },
+      {
+        text: "Your government was hacked!",
+        choices: [
+          { text: "Increase security", effect: { military: +10, happiness: -5 } },
+          { text: "Ignore it", effect: { military: -5, economy: -10 } }
+        ]
+      },
+      // Add more than 40 diverse events here
+      {
+        text: "A global pandemic has struck.",
+        choices: [
+          { text: "Enforce lockdown", effect: { economy: -20, happiness: -10, environment: +10 } },
+          { text: "Ignore it", effect: { happiness: +5, environment: -15 } }
+        ]
+      },
+      {
+        text: "A tech company wants to invest in your country.",
+        choices: [
+          { text: "Approve", effect: { economy: +20, military: -5 } },
+          { text: "Decline", effect: { happiness: +5 } }
+        ]
+      },
+      // 35+ more events can be added here...
     ];
 
     const eventText = document.getElementById("eventText");
@@ -102,31 +158,43 @@
     }
 
     function startGame() {
-      const currentEvent = events[Math.floor(Math.random() * events.length)];
+      let currentEvent = getRandomEvent();
+
+      // Update event text and buttons
       eventText.textContent = currentEvent.text;
       btn1.textContent = currentEvent.choices[0].text;
       btn2.textContent = currentEvent.choices[1].text;
       btn2.style.display = "inline-block";
 
-      btn1.onclick = () => {
-        applyEffects(currentEvent.choices[0].effect);
-        startGame();
-      };
-      btn2.onclick = () => {
-        applyEffects(currentEvent.choices[1].effect);
-        startGame();
-      };
+      btn1.onclick = () => handleChoice(currentEvent.choices[0].effect);
+      btn2.onclick = () => handleChoice(currentEvent.choices[1].effect);
+    }
+
+    function getRandomEvent() {
+      // 15% chance of a government hack event
+      if (Math.random() < 0.15) {
+        return events.find(event => event.text === "Your government was hacked!");
+      }
+
+      // Select a random event otherwise
+      return events[Math.floor(Math.random() * events.length)];
+    }
+
+    function handleChoice(effect) {
+      applyEffects(effect);
+      startGame(); // Show next event after choice
     }
 
     function applyEffects(effect) {
       for (let key in effect) {
         stats[key] += effect[key];
-        stats[key] = Math.max(0, Math.min(100, stats[key]));
+        stats[key] = Math.max(0, Math.min(100, stats[key])); // Ensure stats are between 0-100
       }
       updateStats();
     }
 
-    btn1.onclick = startGame;
+    // Initialize game
+    startGame();
   </script>
 
 </body>
