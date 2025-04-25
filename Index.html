@@ -94,53 +94,240 @@
       environment: 50
     };
 
-    // Event set with 40+ different scenarios
-    const events = [
-      {
-        text: "Your people want free healthcare.",
-        choices: [
-          { text: "Approve it", effect: { economy: -10, happiness: +15 } },
-          { text: "Decline", effect: { happiness: -10 } }
-        ]
-      },
-      {
-        text: "A neighboring country threatens war.",
-        choices: [
-          { text: "Boost military", effect: { military: +15, economy: -10 } },
-          { text: "Negotiate peace", effect: { military: -5, happiness: +10 } }
-        ]
-      },
-      {
-        text: "You are offered to invest in solar energy.",
-        choices: [
-          { text: "Invest", effect: { environment: +20, economy: -15 } },
-          { text: "Reject", effect: { environment: -10 } }
-        ]
-      },
-      {
-        text: "Your government was hacked!",
-        choices: [
-          { text: "Increase security", effect: { military: +10, happiness: -5 } },
-          { text: "Ignore it", effect: { military: -5, economy: -10 } }
-        ]
-      },
-      // Add more than 40 diverse events here
-      {
-        text: "A global pandemic has struck.",
-        choices: [
-          { text: "Enforce lockdown", effect: { economy: -20, happiness: -10, environment: +10 } },
-          { text: "Ignore it", effect: { happiness: +5, environment: -15 } }
-        ]
-      },
-      {
-        text: "A tech company wants to invest in your country.",
-        choices: [
-          { text: "Approve", effect: { economy: +20, military: -5 } },
-          { text: "Decline", effect: { happiness: +5 } }
-        ]
-      },
-      // 35+ more events can be added here...
-    ];
+   const events = [
+  {
+    text: "Your people want free healthcare.",
+    choices: [
+      { text: "Approve it", effect: { economy: -10, happiness: +15 } },
+      { text: "Decline", effect: { happiness: -10 } }
+    ]
+  },
+  {
+    text: "A neighboring country threatens war.",
+    choices: [
+      { text: "Boost military", effect: { military: +15, economy: -10 } },
+      { text: "Negotiate peace", effect: { military: -5, happiness: +10 } }
+    ]
+  },
+  {
+    text: "You are offered to invest in solar energy.",
+    choices: [
+      { text: "Invest", effect: { environment: +20, economy: -15 } },
+      { text: "Reject", effect: { environment: -10 } }
+    ]
+  },
+  {
+    text: "Your government was hacked!",
+    choices: [
+      { text: "Increase security", effect: { military: +10, happiness: -5 } },
+      { text: "Ignore it", effect: { military: -5, economy: -10 } }
+    ]
+  },
+  {
+    text: "A global pandemic has struck.",
+    choices: [
+      { text: "Enforce lockdown", effect: { economy: -20, happiness: -10, environment: +10 } },
+      { text: "Ignore it", effect: { happiness: +5, environment: -15 } }
+    ]
+  },
+  {
+    text: "A tech company wants to invest in your country.",
+    choices: [
+      { text: "Approve", effect: { economy: +20, military: -5 } },
+      { text: "Decline", effect: { happiness: +5 } }
+    ]
+  },
+  {
+    text: "A major oil spill has occurred in the ocean.",
+    choices: [
+      { text: "Allocate funds for cleanup", effect: { environment: +15, economy: -10 } },
+      { text: "Ignore it", effect: { environment: -20 } }
+    ]
+  },
+  {
+    text: "Your country has been selected to host the next Olympics.",
+    choices: [
+      { text: "Accept the offer", effect: { economy: +30, happiness: +10 } },
+      { text: "Decline", effect: { economy: -5, military: -5 } }
+    ]
+  },
+  {
+    text: "A massive earthquake has hit a major city.",
+    choices: [
+      { text: "Send aid", effect: { happiness: +20, economy: -15 } },
+      { text: "Ignore it", effect: { happiness: -5, military: +10 } }
+    ]
+  },
+  {
+    text: "A new technology promises to revolutionize agriculture.",
+    choices: [
+      { text: "Invest in the technology", effect: { economy: +25, environment: +10 } },
+      { text: "Ignore it", effect: { economy: -5, environment: -10 } }
+    ]
+  },
+  {
+    text: "A group of scientists has discovered a cure for cancer.",
+    choices: [
+      { text: "Fund the research", effect: { happiness: +20, economy: -10 } },
+      { text: "Refuse funding", effect: { happiness: -5, economy: +5 } }
+    ]
+  },
+  {
+    text: "There is a massive migration crisis at your borders.",
+    choices: [
+      { text: "Accept refugees", effect: { happiness: +10, economy: -5 } },
+      { text: "Turn them away", effect: { happiness: -15, economy: +10 } }
+    ]
+  },
+  {
+    text: "A major tech company has been caught in a scandal.",
+    choices: [
+      { text: "Impose heavy fines", effect: { military: -5, happiness: +5 } },
+      { text: "Let it slide", effect: { economy: +5, military: -10 } }
+    ]
+  },
+  {
+    text: "A violent protest has erupted in the capital.",
+    choices: [
+      { text: "Send in the military", effect: { military: +15, happiness: -10 } },
+      { text: "Negotiate with protesters", effect: { military: -5, happiness: +15 } }
+    ]
+  },
+  {
+    text: "An alien spaceship has been spotted in your airspace.",
+    choices: [
+      { text: "Investigate the sighting", effect: { military: +5, happiness: +5 } },
+      { text: "Ignore it", effect: { military: -5, happiness: -5 } }
+    ]
+  },
+  {
+    text: "There is an outbreak of a new disease in your country.",
+    choices: [
+      { text: "Impose quarantine", effect: { economy: -15, happiness: -5 } },
+      { text: "Ignore it", effect: { happiness: -10, economy: +5 } }
+    ]
+  },
+  {
+    text: "A natural resource has been discovered in your country.",
+    choices: [
+      { text: "Exploit the resource", effect: { economy: +20, environment: -10 } },
+      { text: "Preserve the environment", effect: { environment: +10, economy: -5 } }
+    ]
+  },
+  {
+    text: "There is a rise in cybercrime attacks.",
+    choices: [
+      { text: "Increase cybersecurity", effect: { military: +5, economy: -10 } },
+      { text: "Ignore it", effect: { military: -5, economy: +10 } }
+    ]
+  },
+  {
+    text: "A major natural disaster has destroyed a coastal city.",
+    choices: [
+      { text: "Help rebuild", effect: { economy: -10, happiness: +15 } },
+      { text: "Ignore it", effect: { economy: +5, happiness: -10 } }
+    ]
+  },
+  {
+    text: "Your country has been invited to join a new trade alliance.",
+    choices: [
+      { text: "Join the alliance", effect: { economy: +15, military: -5 } },
+      { text: "Decline the offer", effect: { economy: -5, military: +10 } }
+    ]
+  },
+  {
+    text: "A large corporation wants to establish a factory in your country.",
+    choices: [
+      { text: "Approve the deal", effect: { economy: +20, environment: -5 } },
+      { text: "Reject the deal", effect: { happiness: +10, economy: -5 } }
+    ]
+  },
+  {
+    text: "A new political party is gaining popularity.",
+    choices: [
+      { text: "Support the party", effect: { military: +5, happiness: +10 } },
+      { text: "Oppose the party", effect: { military: -5, happiness: -10 } }
+    ]
+  },
+  {
+    text: "Your country is experiencing a severe drought.",
+    choices: [
+      { text: "Allocate water resources", effect: { environment: +15, economy: -10 } },
+      { text: "Ignore it", effect: { environment: -15, economy: +5 } }
+    ]
+  },
+  {
+    text: "A neighboring country is offering a peace treaty.",
+    choices: [
+      { text: "Accept the treaty", effect: { military: -10, happiness: +15 } },
+      { text: "Reject the treaty", effect: { military: +10, happiness: -5 } }
+    ]
+  },
+  {
+    text: "Your scientists have discovered a new energy source.",
+    choices: [
+      { text: "Invest in the new energy", effect: { economy: +20, environment: +15 } },
+      { text: "Ignore the discovery", effect: { environment: -10, economy: -5 } }
+    ]
+  },
+  {
+    text: "A terrorist attack has taken place in your country.",
+    choices: [
+      { text: "Increase security measures", effect: { military: +20, happiness: -5 } },
+      { text: "Downplay the attack", effect: { military: -5, happiness: +5 } }
+    ]
+  },
+  {
+    text: "A new cultural movement is sweeping across your country.",
+    choices: [
+      { text: "Support the movement", effect: { happiness: +15, economy: -5 } },
+      { text: "Suppress the movement", effect: { military: +10, happiness: -10 } }
+    ]
+  },
+  {
+    text: "A massive forest fire is threatening wildlife.",
+    choices: [
+      { text: "Fight the fire", effect: { environment: +10, economy: -10 } },
+      { text: "Let it burn", effect: { environment: -20, economy: +5 } }
+    ]
+  },
+  {
+    text: "Your country is facing a housing crisis.",
+    choices: [
+      { text: "Build more housing", effect: { economy: -20, happiness: +10 } },
+      { text: "Leave it as is", effect: { happiness: -15, economy: +10 } }
+    ]
+  },
+  {
+    text: "A new celebrity has become involved in politics.",
+    choices: [
+      { text: "Support the celebrity", effect: { happiness: +10, military: -5 } },
+      { text: "Oppose the celebrity", effect: { military: +5, happiness: -10 } }
+    ]
+  },
+  {
+    text: "A major river has dried up.",
+    choices: [
+      { text: "Implement water-saving measures", effect: { environment: +15, economy: -5 } },
+      { text: "Ignore it", effect: { environment: -20, economy: +10 } }
+    ]
+  },
+  {
+    text: "A large number of citizens are protesting for better wages.",
+    choices: [
+      { text: "Raise wages", effect: { happiness: +15, economy: -10 } },
+      { text: "Reject the demands", effect: { happiness: -20, economy: +5 } }
+    ]
+  },
+  {
+    text: "A scientific breakthrough has occurred in genetics.",
+    choices: [
+      { text: "Fund the research", effect: { happiness: +10, economy: -15 } },
+      { text: "Ignore the research", effect: { happiness: -5, economy: +10 } }
+    ]
+  }
+];
+
 
     const eventText = document.getElementById("eventText");
     const btn1 = document.getElementById("choice1");
