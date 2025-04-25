@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do Nothing Game</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2f2f2f;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #message {
+            font-size: 2em;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s;
+        }
+
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2f2f2f;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div id="message">Do Nothing</div>
+    <div id="background"></div>
+
+    <script>
+        let lastActivityTime = Date.now();
+        let activityTimeout;
+        let worldRecord = "8138 hours 22 minutes 5 seconds";
+        let inactivityTime = 0; // Time in seconds
+        let activityMessage = "Do Nothing";
+        let timer;
+
+        const messageElement = document.getElementById("message");
+
+        // Format time into hours, minutes, seconds
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const sec = seconds % 60;
+            return `${hours} hours ${minutes} minutes ${sec} seconds`;
+        }
+
+        // Show the activity message
+        function showMessage(message) {
+            messageElement.style.opacity = 0;
+            setTimeout(() => {
+                messageElement.innerHTML = message;
+                messageElement.style.opacity = 1;
+            }, 2000);
+        }
+
+        // Check if the player has done anything
+        function checkActivity() {
+            const currentTime = Date.now();
+            inactivityTime = Math.floor((currentTime - lastActivityTime) / 1000);
+
+            if (inactivityTime > 0) {
+                // Display the message
+                showMessage(`You did nothing for ${formatTime(inactivityTime)}. The world record is ${worldRecord}.`);
+            }
+
+            lastActivityTime = currentTime;
+            activityTimeout = setTimeout(checkActivity, 1000);
+        }
+
+        // Detect user activity (mouse movement or switching tabs)
+        function userActivity() {
+            lastActivityTime = Date.now();
+        }
+
+        // Detect tab switching or visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                lastActivityTime = Date.now();
+            }
+        });
+
+        // Detect mouse movement
+        document.addEventListener('mousemove', userActivity);
+
+        // Start checking activity
+        checkActivity();
+    </script>
+</body>
+</html>
