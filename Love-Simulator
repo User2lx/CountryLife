@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caress the Stick</title>
+  <style>
+    body {
+      font-family: Comic Sans MS, sans-serif;
+      background: #fefae0;
+      color: #5f4b32;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    #stick {
+      width: 60px;
+      height: 300px;
+      background: #8b5a2b;
+      margin: 40px auto;
+      border-radius: 20px;
+      box-shadow: 0 0 10px #8b5a2b;
+      transition: transform 0.1s;
+      cursor: pointer;
+    }
+    #stick:hover {
+      transform: scale(1.05);
+    }
+    #score {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    #leaderboard {
+      margin-top: 40px;
+    }
+    .leaderboard-entry {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1> Caress the Stick</h1>
+  <div id="score">Score: 0</div>
+  <div id="stick" onclick="caressStick()"></div>
+
+  <div id="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <div class="leaderboard-entry">🥇 Diddy - 1,000,000</div>
+    <div class="leaderboard-entry" id="playerEntry">🥈 You - 0</div>
+  </div>
+
+  <script>
+    let score = 0;
+    const scoreDisplay = document.getElementById("score");
+    const playerEntry = document.getElementById("playerEntry");
+
+    function caressStick() {
+      score += Math.floor(Math.random() * 10) + 1; // adds 1–10 points
+      scoreDisplay.innerText = "Score: " + score;
+      playerEntry.innerText = "🥈 You - " + score.toLocaleString();
+    }
+  </script>
+</body>
+</html>
