@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CountryLife Simulator</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0e0e2c;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .stat {
+      background: #1e1e3f;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .event-box {
+      margin-top: 20px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌍 CountryLife Simulator</h1>
+
+  <div class="stats">
+    <div class="stat">💰 Economy: <span id="economy">50</span></div>
+    <div class="stat">😊 Happiness: <span id="happiness">50</span></div>
+    <div class="stat">💣 Military: <span id="military">50</span></div>
+    <div class="stat">🌱 Environment: <span id="environment">50</span></div>
+  </div>
+
+  <div class="event-box">
+    <h2 id="eventText">Welcome, President! Ready to rule?</h2>
+    <button id="choice1">Start</button>
+    <button id="choice2" style="display: none;">-</button>
+  </div>
+
+  <script>
+    let stats = {
+      economy: 50,
+      happiness: 50,
+      military: 50,
+      environment: 50
+    };
+
+    const events = [
+      {
+        text: "Your people want free healthcare.",
+        choices: [
+          { text: "Approve it", effect: { economy: -10, happiness: +15 } },
+          { text: "Decline", effect: { happiness: -10 } }
+        ]
+      },
+      {
+        text: "A neighboring country threatens war.",
+        choices: [
+          { text: "Boost military", effect: { military: +15, economy: -10 } },
+          { text: "Negotiate peace", effect: { military: -5, happiness: +10 } }
+        ]
+      },
+      {
+        text: "You are offered to invest in solar energy.",
+        choices: [
+          { text: "Invest", effect: { environment: +20, economy: -15 } },
+          { text: "Reject", effect: { environment: -10 } }
+        ]
+      }
+    ];
+
+    const eventText = document.getElementById("eventText");
+    const btn1 = document.getElementById("choice1");
+    const btn2 = document.getElementById("choice2");
+
+    function updateStats() {
+      for (let key in stats) {
+        document.getElementById(key).textContent = stats[key];
+        if (stats[key] <= 0 || stats[key] >= 100) {
+          eventText.textContent = "Game Over! Something went too far!";
+          btn1.style.display = "none";
+          btn2.style.display = "none";
+        }
+      }
+    }
+
+    function startGame() {
+      const currentEvent = events[Math.floor(Math.random() * events.length)];
+      eventText.textContent = currentEvent.text;
+      btn1.textContent = currentEvent.choices[0].text;
+      btn2.textContent = currentEvent.choices[1].text;
+      btn2.style.display = "inline-block";
+
+      btn1.onclick = () => {
+        applyEffects(currentEvent.choices[0].effect);
+        startGame();
+      };
+      btn2.onclick = () => {
+        applyEffects(currentEvent.choices[1].effect);
+        startGame();
+      };
+    }
+
+    function applyEffects(effect) {
+      for (let key in effect) {
+        stats[key] += effect[key];
+        stats[key] = Math.max(0, Math.min(100, stats[key]));
+      }
+      updateStats();
+    }
+
+    btn1.onclick = startGame;
+  </script>
+
+</body>
+</html>
