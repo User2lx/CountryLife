@@ -61,12 +61,13 @@
 
     #hand {
       position: fixed;
-      width: 40px;
-      height: 40px;
+      width: 100px;
+      height: 100px;
       background: url('https://png.pngtree.com/png-clipart/20220628/ourmid/pngtree-finger-human-hand-grasp-png-image_5376101.png') no-repeat center;
       background-size: contain;
       pointer-events: none;
-      z-index: 999;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
@@ -97,6 +98,7 @@
     const playerEntry = document.getElementById("playerEntry");
     const tip = document.getElementById("tip");
     const stickContainer = document.getElementById("stickContainer");
+    const hand = document.getElementById("hand");
 
     stickContainer.addEventListener("mousemove", (e) => {
       const rect = stickContainer.getBoundingClientRect();
@@ -126,24 +128,11 @@
       }
     }
 
-    // Jiggle hand cursor
-    const hand = document.getElementById('hand');
-    let mouseX = 0, mouseY = 0;
-    let handX = 0, handY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    // Follow mouse exactly
+    document.addEventListener("mousemove", (e) => {
+      hand.style.left = e.clientX + "px";
+      hand.style.top = e.clientY + "px";
     });
-
-    function animateHand() {
-      handX += (mouseX - handX) * 0.1;
-      handY += (mouseY - handY) * 0.1;
-      hand.style.transform = `translate(${handX}px, ${handY}px)`;
-      requestAnimationFrame(animateHand);
-    }
-
-    animateHand();
   </script>
 </body>
 </html>
