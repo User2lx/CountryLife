@@ -22,6 +22,7 @@
       width: 60px;
       height: 300px;
       margin: 40px auto;
+      touch-action: none;
     }
 
     #stick {
@@ -73,18 +74,39 @@
       transform: translate(-50%, -50%);
     }
 
-    .drip {
+    .drip, .drip-trail, .splat {
       position: absolute;
+      border-radius: 50%;
+    }
+
+    .drip {
       width: 10px;
-      height: 30px;
-      background: rgba(0, 0, 255, 0.5);
-      border-radius: 5px;
+      height: 20px;
+      background: white;
       animation: dripDown 2s linear forwards;
+      z-index: 3;
+    }
+
+    .drip-trail {
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.4);
+      z-index: 2;
+    }
+
+    .splat {
+      width: 20px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
     }
 
     @keyframes dripDown {
       from { top: 150px; opacity: 1; }
-      to { top: 350px; opacity: 0.8; }
+      to { top: 250px; opacity: 0.9; }
     }
 
     #floorPuddle {
@@ -94,20 +116,29 @@
       transform: translateX(-50%);
       width: 200px;
       height: 30px;
-      background: rgba(0, 0, 255, 0.2);
+      background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       display: none;
       z-index: 0;
     }
 
-    #screenOverlay {
+    #screenOverlay, #frostOverlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 255, 0.15);
       z-index: 0;
+      pointer-events: none;
+    }
+
+    #screenOverlay {
+      background: rgba(255, 255, 255, 0.1);
+      display: none;
+    }
+
+    #frostOverlay {
+      background: rgba(255, 255, 255, 0.3);
       display: none;
     }
   </style>
@@ -130,6 +161,7 @@
   <div id="hand"></div>
   <div id="floorPuddle"></div>
   <div id="screenOverlay"></div>
+  <div id="frostOverlay"></div>
 
   <script>
     let score = 0;
@@ -144,11 +176,9 @@
     const stickContainer = document.getElementById("stickContainer");
     const floorPuddle = document.getElementById("floorPuddle");
     const screenOverlay = document.getElementById("screenOverlay");
+    const frostOverlay = document.getElementById("frostOverlay");
 
-    stickContainer.addEventListener("mousemove", (e) => {
-      const rect = stickContainer.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-
+    function trackMovement(y) {
       if (lastY !== null) {
         if (y < lastY) movedUp = true;
         else if (y > lastY) movedDown = true;
@@ -161,37 +191,77 @@
       }
 
       lastY = y;
+    }
+
+    // Mouse
+    stickContainer.addEventListener("mousemove", (e) => {
+      const rect = stickContainer.getBoundingClientRect();
+      trackMovement(e.clientY - rect.top);
     });
+
+    // Touch
+    stickContainer.addEventListener("touchmove", (e) => {
+      const rect = stickContainer.getBoundingClientRect();
+      const touch = e.touches[0];
+      trackMovement(touch.clientY - rect.top);
+    }, { passive: true });
 
     function increaseScore() {
       score++;
       scoreDisplay.innerText = "Score: " + score;
       playerEntry.innerText = "🥈 You - " + score.toLocaleString();
 
+      if (score === 80) frostOverlay.style.display = "block";
       if (score >= 100) tip.style.background = "white";
+      if (score === 105) frostOverlay.style.display = "none";
       if (score === 150) startDripping();
       if (score === 200) floorPuddle.style.display = "block";
       if (score === 340) screenOverlay.style.display = "block";
-      if (score === 500) stick.style.background = "#deb887"; // tan color
+      if (score === 500) stick.style.background = "#deb887"; // tan
     }
 
     function startDripping() {
       for (let i = 0; i < 5; i++) {
         const drip = document.createElement("div");
         drip.classList.add("drip");
-        drip.style.left = `${30 + Math.random() * 10}px`;
-        drip.style.top = `${150 + Math.random() * 10}px`;
+        drip.style.left = `${25 + Math.random() * 10}px`;
+        drip.style.top = "150px";
         drip.style.animationDelay = `${i * 0.3}s`;
+
+        const trailCount = 6;
+        for (let t = 0; t < trailCount; t++) {
+          const trail = document.createElement("div");
+          trail.className = "drip-trail";
+          trail.style.left = drip.style.left;
+          trail.style.top = 150 + t * 15 + "px";
+          trail.style.position = "absolute";
+          stickContainer.appendChild(trail);
+        }
+
+        drip.addEventListener("animationend", () => {
+          const splat = document.createElement("div");
+          splat.classList.add("splat");
+          splat.style.left = drip.style.left;
+          stickContainer.appendChild(splat);
+          drip.remove();
+        });
+
         stickContainer.appendChild(drip);
       }
     }
 
-    // Follow mouse with hand
-    const hand = document.getElementById('hand');
+    // Hand follows pointer
+    const hand = document.getElementById("hand");
     document.addEventListener("mousemove", (e) => {
       hand.style.left = e.clientX + "px";
       hand.style.top = e.clientY + "px";
     });
+
+    document.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      hand.style.left = touch.clientX + "px";
+      hand.style.top = touch.clientY + "px";
+    }, { passive: true });
   </script>
 </body>
 </html>
