@@ -41,8 +41,6 @@
 
     <script>
         let lastActivityTime = Date.now();
-        let activityTimeout;
-        let worldRecord = "8138 hours 22 minutes 5 seconds";
         let inactivityTime = 0; // Time in seconds
         let activityMessage = "Do Nothing";
         let timer;
@@ -69,15 +67,17 @@
         // Check if the player has done anything
         function checkActivity() {
             const currentTime = Date.now();
-            inactivityTime = Math.floor((currentTime - lastActivityTime) / 1000);
+            inactivityTime = Math.floor((currentTime - lastActivityTime) / 1000); // time in seconds
 
             if (inactivityTime > 0) {
-                // Display the message
-                showMessage(`You did nothing for ${formatTime(inactivityTime)}. The world record is ${worldRecord}.`);
+                // Display the message with the formatted time
+                showMessage(`You did nothing for ${formatTime(inactivityTime)}. The world record is 8138 hours 22 minutes 5 seconds.`);
             }
 
             lastActivityTime = currentTime;
-            activityTimeout = setTimeout(checkActivity, 1000);
+
+            // Check every second
+            timer = setTimeout(checkActivity, 1000);
         }
 
         // Detect user activity (mouse movement or switching tabs)
