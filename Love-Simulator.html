@@ -1,267 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Caress the Stick</title>
-  <style>
-    body {
-      font-family: Comic Sans MS, sans-serif;
-      background: #fefae0;
-      color: #5f4b32;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-      cursor: none;
-      overflow: hidden;
-      position: relative;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Unavailable</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #f2f2f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
 
-    #stickContainer {
-      position: relative;
-      width: 60px;
-      height: 300px;
-      margin: 40px auto;
-      touch-action: none;
-    }
+        .container {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 128, 255, 0.3);
+            max-width: 600px;
+        }
 
-    #stick {
-      width: 60px;
-      height: 300px;
-      background: #8b5a2b;
-      border-radius: 20px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      box-shadow: 0 0 10px #8b5a2b;
-      z-index: 1;
-      transition: background 1s;
-    }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ff4c4c;
+        }
 
-    #tip {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 60px;
-      height: 40px;
-      background: #8b5a2b;
-      border-radius: 20px 20px 0 0;
-      z-index: 2;
-      transition: background 0.5s;
-    }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
 
-    #score {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    #leaderboard {
-      margin-top: 40px;
-    }
-
-    .leaderboard-entry {
-      font-size: 18px;
-    }
-
-    #hand {
-      position: fixed;
-      width: 100px;
-      height: 100px;
-      background: url('https://png.pngtree.com/png-clipart/20220628/ourmid/pngtree-finger-human-hand-grasp-png-image_5376101.png') no-repeat center;
-      background-size: contain;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-    }
-
-    .drip, .drip-trail, .splat {
-      position: absolute;
-      border-radius: 50%;
-    }
-
-    .drip {
-      width: 10px;
-      height: 20px;
-      background: white;
-      animation: dripDown 2s linear forwards;
-      z-index: 3;
-    }
-
-    .drip-trail {
-      width: 4px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.4);
-      z-index: 2;
-    }
-
-    .splat {
-      width: 20px;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.8);
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-    }
-
-    @keyframes dripDown {
-      from { top: 150px; opacity: 1; }
-      to { top: 250px; opacity: 0.9; }
-    }
-
-    #floorPuddle {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 30px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      display: none;
-      z-index: 0;
-    }
-
-    #screenOverlay, #frostOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    #screenOverlay {
-      background: rgba(255, 255, 255, 0.1);
-      display: none;
-    }
-
-    #frostOverlay {
-      background: rgba(255, 255, 255, 0.3);
-      display: none;
-    }
-  </style>
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
 </head>
 <body>
-  <h1>🪵 Caress the Stick</h1>
-  <div id="score">Score: 0</div>
-
-  <div id="stickContainer">
-    <div id="tip"></div>
-    <div id="stick"></div>
-  </div>
-
-  <div id="leaderboard">
-    <h2>🏆 Leaderboard</h2>
-    <div class="leaderboard-entry">🥇 Diddy - 1,000,000</div>
-    <div class="leaderboard-entry" id="playerEntry">🥈 You - 0</div>
-  </div>
-
-  <div id="hand"></div>
-  <div id="floorPuddle"></div>
-  <div id="screenOverlay"></div>
-  <div id="frostOverlay"></div>
-
-  <script>
-    let score = 0;
-    let lastY = null;
-    let movedUp = false;
-    let movedDown = false;
-
-    const scoreDisplay = document.getElementById("score");
-    const playerEntry = document.getElementById("playerEntry");
-    const tip = document.getElementById("tip");
-    const stick = document.getElementById("stick");
-    const stickContainer = document.getElementById("stickContainer");
-    const floorPuddle = document.getElementById("floorPuddle");
-    const screenOverlay = document.getElementById("screenOverlay");
-    const frostOverlay = document.getElementById("frostOverlay");
-
-    function trackMovement(y) {
-      if (lastY !== null) {
-        if (y < lastY) movedUp = true;
-        else if (y > lastY) movedDown = true;
-
-        if (movedUp && movedDown) {
-          increaseScore();
-          movedUp = false;
-          movedDown = false;
-        }
-      }
-
-      lastY = y;
-    }
-
-    // Mouse
-    stickContainer.addEventListener("mousemove", (e) => {
-      const rect = stickContainer.getBoundingClientRect();
-      trackMovement(e.clientY - rect.top);
-    });
-
-    // Touch
-    stickContainer.addEventListener("touchmove", (e) => {
-      const rect = stickContainer.getBoundingClientRect();
-      const touch = e.touches[0];
-      trackMovement(touch.clientY - rect.top);
-    }, { passive: true });
-
-    function increaseScore() {
-      score++;
-      scoreDisplay.innerText = "Score: " + score;
-      playerEntry.innerText = "🥈 You - " + score.toLocaleString();
-
-      if (score === 80) frostOverlay.style.display = "block";
-      if (score >= 100) tip.style.background = "white";
-      if (score === 105) frostOverlay.style.display = "none";
-      if (score === 150) startDripping();
-      if (score === 200) floorPuddle.style.display = "block";
-      if (score === 340) screenOverlay.style.display = "block";
-      if (score === 500) stick.style.background = "#deb887"; // tan
-    }
-
-    function startDripping() {
-      for (let i = 0; i < 5; i++) {
-        const drip = document.createElement("div");
-        drip.classList.add("drip");
-        drip.style.left = `${25 + Math.random() * 10}px`;
-        drip.style.top = "150px";
-        drip.style.animationDelay = `${i * 0.3}s`;
-
-        const trailCount = 6;
-        for (let t = 0; t < trailCount; t++) {
-          const trail = document.createElement("div");
-          trail.className = "drip-trail";
-          trail.style.left = drip.style.left;
-          trail.style.top = 150 + t * 15 + "px";
-          trail.style.position = "absolute";
-          stickContainer.appendChild(trail);
-        }
-
-        drip.addEventListener("animationend", () => {
-          const splat = document.createElement("div");
-          splat.classList.add("splat");
-          splat.style.left = drip.style.left;
-          stickContainer.appendChild(splat);
-          drip.remove();
-        });
-
-        stickContainer.appendChild(drip);
-      }
-    }
-
-    // Hand follows pointer
-    const hand = document.getElementById("hand");
-    document.addEventListener("mousemove", (e) => {
-      hand.style.left = e.clientX + "px";
-      hand.style.top = e.clientY + "px";
-    });
-
-    document.addEventListener("touchmove", (e) => {
-      const touch = e.touches[0];
-      hand.style.left = touch.clientX + "px";
-      hand.style.top = touch.clientY + "px";
-    }, { passive: true });
-  </script>
+    <div class="container">
+        <h1>Service Removed</h1>
+        <p>
+            This page has been removed due to too many searches and the risk of teachers or administrators placing me in detention.<br><br>
+            However, I am currently working on a better game that will include lots of detail. Stay tuned!
+        </p>
+        <div class="footer">
+            &copy; 2025 Unplugged. All rights reserved.
+        </div>
+    </div>
 </body>
 </html>
